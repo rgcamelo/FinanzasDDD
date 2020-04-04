@@ -10,7 +10,7 @@ namespace Domain.Entities
 
         public DateTime FechaDeTermino { get; set; }
 
-        public DateTime FechaDeInicio { get; set; } 
+        public DateTime FechaDeInicio { get; set; }
 
         public bool ConsignacionInicial = true;
 
@@ -35,52 +35,67 @@ namespace Domain.Entities
             {
                 if (valor >= MINIMOCONSIGNACION)
                 {
-                    MovimientoFinanciero consignacion = new MovimientoFinanciero();
-                    consignacion.ValorConsignacion = valor;
-                    consignacion.FechaMovimiento = DateTime.Now;
-                    Saldo += valor;
-                    this.Movimientos.Add(consignacion);
+                    NuevoMovimiento(valor, "Consignar");
                     this.ConsignacionInicial = false;
-                    this.FechaDeInicio = consignacion.FechaMovimiento;
-                    
+                    this.FechaDeInicio = DateTime.Now;
+
                 }
                 else
                 {
-                    throw new Exception("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 1 millon");
+                    throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 1 millon");
                 }
             }
             else
             {
-                throw new Exception("Solo se puede consignar una vez");
+                throw new InvalidOperationException("Solo se puede consignar una vez");
 
             }
 
         }
 
         public void Retirar(double valor)
-        {     
+        {
             if (FechaDeTermino < DateTime.Now)
             {
                 SaldoConIntereses();
-                MovimientoFinanciero retiro = new MovimientoFinanciero();
-                retiro.ValorRetiro = valor;
-                retiro.FechaMovimiento = DateTime.Now;
+                NuevoMovimiento(valor, "Retirar");
                 Saldo -= valor;
-                this.Movimientos.Add(retiro);
             }
             else
             {
-                throw new Exception("No es posible realizar el Retiro, porque no se ha cumplido la fecha a termino");
+                throw new InvalidOperationException("No es posible realizar el Retiro, porque no se ha cumplido la fecha a termino");
             }
         }
 
-        public double  SaldoConIntereses()
+        public double SaldoConIntereses()
         {
             TimeSpan meses = (FechaDeTermino - FechaDeInicio);
             int dias = (meses.Days / 30);
             double saldoConInteres = Saldo * (1 + TasaInteres * dias); //tasa de interes mensual simple
             Saldo = saldoConInteres;
             return saldoConInteres;
+        }
+
+        public void NuevoMovimiento(double valor, string tipoMovimiento)
+        {
+            MovimientoFinanciero movimiento = new MovimientoFinanciero();
+
+            switch (tipoMovimiento)
+            {
+                case "Consignar":
+                    Saldo += valor;
+                    movimiento.ValorConsignacion = valor;
+                    break;
+                case "Retirar":
+                    Saldo -= valor;
+                    movimiento.ValorRetiro = valor;
+                    break;
+            }
+
+            movimiento.FechaMovimiento = DateTime.Now;
+
+            this.Movimientos.Add(movimiento);
+
         }
 
     }
