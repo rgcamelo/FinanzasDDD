@@ -6,3 +6,11 @@ C:\Users\cj\Desktop\DDDCore3-master\Domain\obj\Debug\netstandard2.0\Domain.Assem
 C:\Users\cj\Desktop\DDDCore3-master\Domain\obj\Debug\netstandard2.0\Domain.AssemblyInfo.cs
 C:\Users\cj\Desktop\DDDCore3-master\Domain\obj\Debug\netstandard2.0\Domain.dll
 C:\Users\cj\Desktop\DDDCore3-master\Domain\obj\Debug\netstandard2.0\Domain.pdb
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\obj\Debug\netstandard2.0\Domain.csprojAssemblyReference.cache
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\obj\Debug\netstandard2.0\Domain.AssemblyInfoInputs.cache
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\obj\Debug\netstandard2.0\Domain.AssemblyInfo.cs
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\obj\Debug\netstandard2.0\Domain.dll
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\obj\Debug\netstandard2.0\Domain.pdb
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\bin\Debug\netstandard2.0\Domain.deps.json
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\bin\Debug\netstandard2.0\Domain.dll
+C:\Users\Rafa\source\repos\FinanzasDDD\Domain\bin\Debug\netstandard2.0\Domain.pdb

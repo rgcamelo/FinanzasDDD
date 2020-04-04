@@ -1,21 +1,26 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Application\\Application.csproj": {}
+    "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Application\\Application.csproj": {}
   },
   "projects": {
-    "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Application\\Application.csproj": {
+    "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Application\\Application.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Application\\Application.csproj",
+        "projectUniqueName": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Application\\Application.csproj",
         "projectName": "Application",
-        "projectPath": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Application\\Application.csproj",
-        "packagesPath": "C:\\Users\\cj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Application\\obj\\",
+        "projectPath": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Application\\Application.csproj",
+        "packagesPath": "C:\\Users\\Rafa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Application\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\cj\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Rafa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -27,8 +32,8 @@
         "frameworks": {
           "netstandard2.0": {
             "projectReferences": {
-              "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Domain\\Domain.csproj": {
-                "projectPath": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Domain\\Domain.csproj"
+              "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Domain\\Domain.csproj": {
+                "projectPath": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Domain\\Domain.csproj"
               }
             }
           }
@@ -59,22 +64,27 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Domain\\Domain.csproj": {
+    "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Domain\\Domain.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Domain\\Domain.csproj",
+        "projectUniqueName": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Domain\\Domain.csproj",
         "projectName": "Domain",
-        "projectPath": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Domain\\Domain.csproj",
-        "packagesPath": "C:\\Users\\cj\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\cj\\Desktop\\DDDCore3-master\\Domain\\obj\\",
+        "projectPath": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Domain\\Domain.csproj",
+        "packagesPath": "C:\\Users\\Rafa\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\Rafa\\source\\repos\\FinanzasDDD\\Domain\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Microsoft\\Xamarin\\NuGet\\",
+          "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        ],
         "configFilePaths": [
-          "C:\\Users\\cj\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Rafa\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.0"
@@ -114,7 +124,7 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.100\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.101\\RuntimeIdentifierGraph.json"
         }
       }
     }

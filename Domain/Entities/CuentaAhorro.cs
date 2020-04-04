@@ -143,10 +143,9 @@ namespace Domain.Entities
             }
         }
 
-        
         public bool RetirosSinCosto()
         {
-            if(this.ContadorRetiroMes < 3)
+            if (this.ContadorRetiroMes < 3)
             {
                 return true;
             }
@@ -158,7 +157,10 @@ namespace Domain.Entities
         }
 
 
-        
+
+
+
+
     }
 
 

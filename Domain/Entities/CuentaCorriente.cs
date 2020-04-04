@@ -4,162 +4,66 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class CuentaAhorro : CuentaBancaria
+    public class CuentaCorriente : CuentaBancaria
     {
-        public const double TOPERETIRO = 20000;
+        public const double SOBREGIRO = 10000;
         public bool ConsignacionInicial = true;
-        private const double MINIMO_CONSIGNACION = 50000;
-        private int ContadorRetiroMes = 0;
-
-
+        private const double MINIMO_CONSIGNACION = 100000;
 
         public override void Consignar(double valor, string ciudad)
         {
-            bool mayoryDiferenteDeZero = ValidadValorMayorYDiferenteZero(valor);
-            bool valorMinimoConsignacion = ValorMinimoConsignacion(valor,MINIMO_CONSIGNACION);
-            bool mismaCiudad = MismaCiudad(ciudad, valor);
+            bool validoMayorZero = ValidadValorMayorYDiferenteZero(valor);
 
-            if (!mayoryDiferenteDeZero)
-            {
-                throw new InvalidOperationException("Valor Invalido");
-            }
-            else
+            if (validoMayorZero)
             {
                 if (ConsignacionInicial)
                 {
-                    if (mismaCiudad)
+                    if (ValorMinimoConsignacion(valor, MINIMO_CONSIGNACION))
                     {
-                        if (valorMinimoConsignacion)
-                        {
-                            
-                            NuevoMovimiento(valor, "Consignar");
-                            this.ConsignacionInicial = false;
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
-                        }
-                    }
-                    else
-                    {
-                        if (valorMinimoConsignacion)
-                        {
-                            if (FondosSuficientes(valor, 10000))
-                            {
-                                CostoMovimiento(10000);
-                                NuevoMovimiento(valor, "Consignar");
-                            }
-                            else
-                            {
-                                throw new InvalidOperationException("Fondos insuficientes");
-                            }
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
-                        }
-                        
-                        
-                    }
-                    
-                }
-                else
-                {
-                    if (mismaCiudad)
-                    {
+                        this.ConsignacionInicial = false;
                         NuevoMovimiento(valor, "Consignar");
                     }
                     else
                     {
-                        if (FondosSuficientes(valor,10000))
-                        {
-                            CostoMovimiento(10000);
-                            NuevoMovimiento(valor, "Consignar");
-                        }
-                        else
-                        {
-                            throw new InvalidOperationException("Fondos insuficientes");
-                        }
-                    }
-                    
-
-                }
-            }
-
-            
-        }
-
-        
-
-        public bool MismaCiudad( string ciudad,double valor)
-        {
-            if ( this.Ciudad == ciudad)
-            {
-                return true;
-                
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        //////////
-
-        public override void Retirar(double valor)
-        {
-            bool mayoryDiferenteDeZero = ValidadValorMayorYDiferenteZero(valor);
-
-            if (!mayoryDiferenteDeZero)
-            {
-                throw new InvalidOperationException("Valor Invalido");
-            }
-            else
-            {
-                if (RetirosSinCosto())
-                {
-                    if (SaldoMinimoAlRetirar(valor,TOPERETIRO))
-                    {
-                        NuevoMovimiento(valor, "Retirar");
-                        ContadorRetiroMes++;
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
+                        throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 100000");
                     }
                 }
                 else
                 {
-                    if (SaldoMinimoAlRetirar(valor,TOPERETIRO))
-                    {
-                        CostoMovimiento(5000);
-                        NuevoMovimiento(valor, "Retirar");
-                    }
-                    else
-                    {
-                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
-                    }
+                    NuevoMovimiento(valor, "Consignar");
                 }
-            }
-        }
 
-        
-        public bool RetirosSinCosto()
-        {
-            if(this.ContadorRetiroMes < 3)
-            {
-                return true;
             }
             else
             {
-                return false;
-
+                throw new InvalidOperationException("Valor Invalido");
             }
+
+
         }
 
+        public override void Retirar(double valor)
+        {
 
-        
+            bool valorValido = ValidadValorMayorYDiferenteZero(valor);
+
+            if (valorValido)
+            {
+                if (SaldoMinimoAlRetirar(valor, SOBREGIRO + 4000))
+                {
+                    CostoMovimiento(4000);
+                    NuevoMovimiento(valor, "Retirar");
+                }
+                else
+                {
+                    throw new InvalidOperationException("Fondos insuficientes");
+                }
+            }
+            else
+            {
+                throw new InvalidOperationException("Valor Invalido");
+            }
+        }
     }
-
 
 }
