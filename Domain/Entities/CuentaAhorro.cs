@@ -125,7 +125,7 @@ namespace Domain.Entities
                     }
                     else
                     {
-                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
+                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000");
                     }
                 }
                 else

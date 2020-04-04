@@ -15,7 +15,7 @@ namespace Domain.Entities
         public List<MovimientoFinanciero> Movimientos { get; set; }
         public string Nombre { get; set; }
         public string Numero { get; set; }
-        public double Saldo { get; protected set; }
+        public double Saldo { get; set; }
         public string Ciudad { get; set; }
 
 
