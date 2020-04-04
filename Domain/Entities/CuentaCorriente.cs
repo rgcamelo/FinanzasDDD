@@ -4,92 +4,162 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    public class CuentaCorriente : CuentaBancaria
+    public class CuentaAhorro : CuentaBancaria
     {
-        public const double SOBREGIRO = -1000;
+        public const double TOPERETIRO = 20000;
         public bool ConsignacionInicial = true;
-        private const double MINIMOCONSIGNACION = 100000;
-        private const double COSTORETIRO = 4000;
+        private const double MINIMO_CONSIGNACION = 50000;
+        private int ContadorRetiroMes = 0;
 
-        public override void Consignar(double valor,string ciudad)
+
+
+        public override void Consignar(double valor, string ciudad)
         {
-            if (valor != 0)
+            bool mayoryDiferenteDeZero = ValidadValorMayorYDiferenteZero(valor);
+            bool valorMinimoConsignacion = ValorMinimoConsignacion(valor,MINIMO_CONSIGNACION);
+            bool mismaCiudad = MismaCiudad(ciudad, valor);
+
+            if (!mayoryDiferenteDeZero)
             {
-                if (this.ConsignacionInicial == true)
+                throw new InvalidOperationException("Valor Invalido");
+            }
+            else
+            {
+                if (ConsignacionInicial)
                 {
-                    if (valor >= MINIMOCONSIGNACION)
+                    if (mismaCiudad)
                     {
-                        GenerarMovimiento(valor, "Consignacion");
+                        if (valorMinimoConsignacion)
+                        {
+                            
+                            NuevoMovimiento(valor, "Consignar");
+                            this.ConsignacionInicial = false;
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
+                        }
                     }
                     else
                     {
-                        throw new CuentaCorrienteRetirarMaximoSobregiroException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
+                        if (valorMinimoConsignacion)
+                        {
+                            if (FondosSuficientes(valor, 10000))
+                            {
+                                CostoMovimiento(10000);
+                                NuevoMovimiento(valor, "Consignar");
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("Fondos insuficientes");
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
+                        }
+                        
+                        
+                    }
+                    
+                }
+                else
+                {
+                    if (mismaCiudad)
+                    {
+                        NuevoMovimiento(valor, "Consignar");
+                    }
+                    else
+                    {
+                        if (FondosSuficientes(valor,10000))
+                        {
+                            CostoMovimiento(10000);
+                            NuevoMovimiento(valor, "Consignar");
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Fondos insuficientes");
+                        }
+                    }
+                    
+
+                }
+            }
+
+            
+        }
+
+        
+
+        public bool MismaCiudad( string ciudad,double valor)
+        {
+            if ( this.Ciudad == ciudad)
+            {
+                return true;
+                
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        //////////
+
+        public override void Retirar(double valor)
+        {
+            bool mayoryDiferenteDeZero = ValidadValorMayorYDiferenteZero(valor);
+
+            if (!mayoryDiferenteDeZero)
+            {
+                throw new InvalidOperationException("Valor Invalido");
+            }
+            else
+            {
+                if (RetirosSinCosto())
+                {
+                    if (SaldoMinimoAlRetirar(valor,TOPERETIRO))
+                    {
+                        NuevoMovimiento(valor, "Retirar");
+                        ContadorRetiroMes++;
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
                     }
                 }
                 else
                 {
-                    GenerarMovimiento(valor, "Consignacion");
-
+                    if (SaldoMinimoAlRetirar(valor,TOPERETIRO))
+                    {
+                        CostoMovimiento(5000);
+                        NuevoMovimiento(valor, "Retirar");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
+                    }
                 }
             }
-            else
-            {
-                throw new CuentaCorrienteRetirarMaximoSobregiroException("No es posible realizar la consignacion, la consignacion debe ser mayor a 0");
-            }
-            
-
-
         }
 
-        public override void Retirar(double valor)
+        
+        public bool RetirosSinCosto()
         {
-            double nuevoSaldo = Saldo - valor;
-            if (nuevoSaldo >= SOBREGIRO)
+            if(this.ContadorRetiroMes < 3)
             {
-                GenerarMovimiento(valor,"Retiro");
+                return true;
             }
             else
             {
-                throw new CuentaCorrienteRetirarMaximoSobregiroException("No es posible realizar el Retiro, supera el valor de sobregiro permitido");
+                return false;
+
             }
         }
-        public void GenerarMovimiento(double valor, string tipo)
-        {
-            if (tipo == "Consignacion")
-            {
-                MovimientoFinanciero consignacion = new MovimientoFinanciero();
-                consignacion.ValorConsignacion = valor;
-                consignacion.FechaMovimiento = DateTime.Now;
-                Saldo += valor;
-                this.Movimientos.Add(consignacion);
-            }
-            else
-            if (tipo == "Retiro")
-            {
-                valor -= COSTORETIRO;
-                MovimientoFinanciero movimiento = new MovimientoFinanciero();
-                movimiento.ValorRetiro = valor;
-                movimiento.FechaMovimiento = DateTime.Now;
-                Saldo -= valor;
-                this.Movimientos.Add(movimiento);
-            }
-        }
+
+
+        
     }
 
-  
 
-
-
-    [Serializable]
-    public class CuentaCorrienteRetirarMaximoSobregiroException : Exception
-    {
-        public CuentaCorrienteRetirarMaximoSobregiroException() { }
-        public CuentaCorrienteRetirarMaximoSobregiroException(string message) : base(message) { }
-        public CuentaCorrienteRetirarMaximoSobregiroException(string message, Exception inner) : base(message, inner) { }
-        protected CuentaCorrienteRetirarMaximoSobregiroException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-    }
-
-   
 }

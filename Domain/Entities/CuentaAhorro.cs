@@ -6,130 +6,160 @@ namespace Domain.Entities
 {
     public class CuentaAhorro : CuentaBancaria
     {
-        private const double TOPERETIRO = 20000;
-        private bool ConsignacionInicial = true;
-        private const double MINIMOCONSIGNACION = 50000;
-        private int contadorRetiro=0;
-        private const double VALORRETITO = 5000;
-        private const double VALORCONSIGNACION = 10000;
+        public const double TOPERETIRO = 20000;
+        public bool ConsignacionInicial = true;
+        private const double MINIMO_CONSIGNACION = 50000;
+        private int ContadorRetiroMes = 0;
 
-        public override void Consignar(double valor,string ciudad)
+
+
+        public override void Consignar(double valor, string ciudad)
         {
-            if(valor != 0)
+            bool mayoryDiferenteDeZero = ValidadValorMayorYDiferenteZero(valor);
+            bool valorMinimoConsignacion = ValorMinimoConsignacion(valor,MINIMO_CONSIGNACION);
+            bool mismaCiudad = MismaCiudad(ciudad, valor);
+
+            if (!mayoryDiferenteDeZero)
             {
-                if (this.ConsignacionInicial == true)
+                throw new InvalidOperationException("Valor Invalido");
+            }
+            else
+            {
+                if (ConsignacionInicial)
                 {
-                    if (valor >= MINIMOCONSIGNACION)
+                    if (mismaCiudad)
                     {
-                        if (ciudad == this.Ciudad)
+                        if (valorMinimoConsignacion)
                         {
-                            GenerarMovimiento(valor, "Consignacion");
+                            
+                            NuevoMovimiento(valor, "Consignar");
+                            this.ConsignacionInicial = false;
                         }
                         else
                         {
-                            valor -= VALORCONSIGNACION;//se cobra el valor de la consignacion
-                            GenerarMovimiento(valor, "Consignacion");
+                            throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
                         }
                     }
                     else
                     {
-                        throw new CuentaCorrienteConsignarException("No es posible realizar la consignacion," +
-                            " la primera consignacion debe ser mayor a 50000");
+                        if (valorMinimoConsignacion)
+                        {
+                            if (FondosSuficientes(valor, 10000))
+                            {
+                                CostoMovimiento(10000);
+                                NuevoMovimiento(valor, "Consignar");
+                            }
+                            else
+                            {
+                                throw new InvalidOperationException("Fondos insuficientes");
+                            }
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("No es posible realizar la consignacion, la primera consignacion debe ser mayor a 50000");
+                        }
+                        
+                        
                     }
+                    
                 }
                 else
                 {
-                    if (ciudad == this.Ciudad)
+                    if (mismaCiudad)
                     {
-                        GenerarMovimiento(valor, "Consignacion");
+                        NuevoMovimiento(valor, "Consignar");
                     }
                     else
                     {
-                        valor -= VALORCONSIGNACION;
-                        GenerarMovimiento(valor, "Consignacion");
+                        if (FondosSuficientes(valor,10000))
+                        {
+                            CostoMovimiento(10000);
+                            NuevoMovimiento(valor, "Consignar");
+                        }
+                        else
+                        {
+                            throw new InvalidOperationException("Fondos insuficientes");
+                        }
                     }
+                    
+
                 }
+            }
+
+            
+        }
+
+        
+
+        public bool MismaCiudad( string ciudad,double valor)
+        {
+            if ( this.Ciudad == ciudad)
+            {
+                return true;
+                
             }
             else
             {
-                throw new CuentaCorrienteConsignarException("No es posible realizar la consignacion, debe ser mayor que 0");
+                return false;
             }
-
-
-
         }
+
+        //////////
 
         public override void Retirar(double valor)
         {
-            double nuevoSaldo = Saldo - valor;
-            if(valor != 0)
+            bool mayoryDiferenteDeZero = ValidadValorMayorYDiferenteZero(valor);
+
+            if (!mayoryDiferenteDeZero)
             {
-                if (nuevoSaldo >= TOPERETIRO)
+                throw new InvalidOperationException("Valor Invalido");
+            }
+            else
+            {
+                if (RetirosSinCosto())
                 {
-                    if (contadorRetiro < 3)
+                    if (SaldoMinimoAlRetirar(valor,TOPERETIRO))
                     {
-                        GenerarMovimiento(valor, "Retiro");
+                        NuevoMovimiento(valor, "Retirar");
+                        ContadorRetiroMes++;
                     }
                     else
                     {
-                        valor -= VALORRETITO;
-                        GenerarMovimiento(valor, "Retiro");
+                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
                     }
                 }
                 else
                 {
-                    throw new CuentaAhorroTopeDeRetiroException("No es posible realizar el Retiro, Supera el tope mínimo permitido de retiro");
+                    if (SaldoMinimoAlRetirar(valor,TOPERETIRO))
+                    {
+                        CostoMovimiento(5000);
+                        NuevoMovimiento(valor, "Retirar");
+                    }
+                    else
+                    {
+                        throw new InvalidOperationException("No es Posible Retirar, El saldo minimo deber ser 20000 ");
+                    }
                 }
             }
-            else
-            {
-                throw new CuentaAhorroTopeDeRetiroException("No es posible realizar el Retiro de 0");
-
-            }
         }
-        public void GenerarMovimiento(double valor, string tipo)
+
+        
+        public bool RetirosSinCosto()
         {
-            if (tipo == "Consignacion")
+            if(this.ContadorRetiroMes < 3)
             {
-                MovimientoFinanciero consignacion = new MovimientoFinanciero();
-                consignacion.ValorConsignacion = valor;
-                consignacion.FechaMovimiento = DateTime.Now;
-                Saldo += valor;
-                this.Movimientos.Add(consignacion);
+                return true;
             }
             else
-            if(tipo == "Retiro")
             {
-                MovimientoFinanciero consignacion = new MovimientoFinanciero();
-                consignacion.ValorConsignacion = valor;
-                consignacion.FechaMovimiento = DateTime.Now;
-                Saldo -= valor;
-                this.Movimientos.Add(consignacion);
+                return false;
+
             }
         }
-        }
-    }
 
-    public class CuentaCorrienteConsignarException : Exception
-    {
-        public CuentaCorrienteConsignarException() { }
-        public CuentaCorrienteConsignarException(string message) : base(message) { }
-        public CuentaCorrienteConsignarException(string message, Exception inner) : base(message, inner) { }
-        protected CuentaCorrienteConsignarException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
+
+        
     }
 
 
-
-    [Serializable]
-    public class CuentaAhorroTopeDeRetiroException : Exception
-    {
-        public CuentaAhorroTopeDeRetiroException() { }
-        public CuentaAhorroTopeDeRetiroException(string message) : base(message) { }
-        public CuentaAhorroTopeDeRetiroException(string message, Exception inner) : base(message, inner) { }
-        protected CuentaAhorroTopeDeRetiroException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
-    }
 }
