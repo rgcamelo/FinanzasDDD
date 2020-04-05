@@ -27,10 +27,10 @@ namespace Application.Test
         {
             var FechaDeInicio = new DateTime(2020, 2, 4);
             var FechaDeTermino = new DateTime(2020, 3, 4); //Año Mes Dia
-            var request = new CrearDepositoATerminoRequest { Numero = "1111", Nombre = "aaaaa", FechaDeInicio = FechaDeInicio, FechaDeTermino = FechaDeTermino, TasaInteres = 0.2, Ciudad = "Valledupar" };
+            var request = new CrearDepositoATerminoRequest { Numero = "1191", Nombre = "aaaaa", FechaDeInicio = FechaDeInicio, FechaDeTermino = FechaDeTermino, TasaInteres = 0.2, Ciudad = "Valledupar" };
             CrearDepositoATerminoService _service = new CrearDepositoATerminoService(new UnitOfWork(_context));
             var response = _service.Ejecutar(request);
-            Assert.AreEqual("Se creó con exito el deposito 1111.", response.Mensaje);
+            Assert.AreEqual("Se creó con exito el deposito 1191.", response.Mensaje);
         }
 
         [Test]
@@ -45,6 +45,26 @@ namespace Application.Test
             ConsignarService _service1 = new ConsignarService(new UnitOfWork(_context));
             var response2 = _service1.Ejecutar(request1, "CDT");
             Assert.AreEqual("Su Nuevo saldo es 1000000.", response2.Mensaje);
+        }
+
+        [Test]
+        public void RetirarCDTTest()
+        {
+            var FechaDeInicio = new DateTime(2020, 2, 4);
+            var FechaDeTermino = new DateTime(2020, 3, 4); //Año Mes Dia
+            var request = new CrearDepositoATerminoRequest { Numero = "1111", Nombre = "aaaaa", FechaDeInicio = FechaDeInicio, FechaDeTermino = FechaDeTermino, TasaInteres = 0.2, Ciudad = "Valledupar" };
+            CrearDepositoATerminoService _service = new CrearDepositoATerminoService(new UnitOfWork(_context));
+            var response = _service.Ejecutar(request);
+
+            var request1 = new ConsignarRequest { Numero = "1111", Valor = 1000000, Ciudad = "Valledupar" };
+            ConsignarService _service1 = new ConsignarService(new UnitOfWork(_context));
+            var response2 = _service1.Ejecutar(request1, "CDT");
+
+            var request2 = new RetirarRequest { Numero = "1111", Valor = 10000 };
+            RetirarServices retirarServices = new RetirarServices(new UnitOfWork(_context));
+            var response3 = retirarServices.Ejecutar(request2, "CDT");
+            Assert.AreEqual("Su Nuevo saldo es 980000.", response3.Mensaje);
+
         }
 
 
