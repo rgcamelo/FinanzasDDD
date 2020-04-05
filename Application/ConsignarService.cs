@@ -13,14 +13,36 @@ namespace Application
         {
             _unitOfWork = unitOfWork;
         }
-        public ConsignarResponse Ejecutar(ConsignarRequest request)
+
+
+        public void Ejecutar(ConsignarRequest request,string tipo)
         {
-            var cuenta = _unitOfWork.CuentaBancariaRepository.FindFirstOrDefault(t => t.Numero==request.NumeroCuenta);
-            if (cuenta != null)
+            switch (tipo)
             {
-                cuenta.Consignar(request.Valor,"Valledupar");
+                case "CuentaBancaria":
+                    var cuenta = _unitOfWork.CuentaBancariaRepository.FindFirstOrDefault(t => t.Numero == request.NumeroCuenta);
+                    Consignar(cuenta, request.Valor);
+                    break;
+                case "CDT":
+                    var cdt = _unitOfWork.DepositoATerminoRepository.FindFirstOrDefault(t => t.Numero == request.NumeroCuenta);
+                    Consignar(cdt, request.Valor);
+                    break;
+                case "TarjetaCredito":
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(message: "Tipo de Servicio Financiero No Valido", innerException: null);
+            }
+            
+            
+        }
+
+        public ConsignarResponse Consignar(IServicioFinanciero servicioFinanciero, double valor)
+        {
+            if (servicioFinanciero != null)
+            {
+                servicioFinanciero.Consignar(valor, "Valledupar");
                 _unitOfWork.Commit();
-                return new ConsignarResponse() { Mensaje = $"Su Nuevo saldo es {cuenta.Saldo}." };
+                return new ConsignarResponse() { Mensaje = $"Su Nuevo saldo es {servicioFinanciero.Saldo}." };
             }
             else
             {
@@ -32,6 +54,7 @@ namespace Application
     {
         public string NumeroCuenta { get; set; }
         public double Valor { get; set; }
+        public string Ciudad { get; set; }
     }
     public class ConsignarResponse
     {

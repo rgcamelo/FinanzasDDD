@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Domain.Entities
 {
-    class Tarjeta_de_Credito: Entity<int>, IServicioFinanciero
+    public class Tarjeta_de_Credito: Entity<int>, IServicioFinanciero
     {
         public string Nombre { get; set; }
         public string Numero { get; set; }

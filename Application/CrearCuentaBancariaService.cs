@@ -23,7 +23,7 @@ namespace Application
             if (cuenta == null)
             {
 
-                CuentaBancaria cuentaNueva = new CuentaBancariaFactory().CreateEntity(request.TipoCuenta);
+                CuentaBancaria cuentaNueva = _genericFactory.CreateEntity(request.TipoCuenta);
                 cuentaNueva.Nombre = request.Nombre;
                 cuentaNueva.Numero = request.Numero;
                 cuentaNueva.Ciudad = request.Ciudad;
@@ -33,7 +33,7 @@ namespace Application
             }
             else
             {
-                return new CrearCuentaBancariaResponse() { Mensaje = $"El número de cuenta ya exite" };
+                return new CrearCuentaBancariaResponse() { Mensaje = "El número de cuenta ya exite" };
             }
         }
 

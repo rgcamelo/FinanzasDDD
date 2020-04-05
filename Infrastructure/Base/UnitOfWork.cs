@@ -16,6 +16,8 @@ namespace Infrastructure.Base
 
         private IDepositoATerminoRepository _depositoATerminoRepository;
 
+       
+
         public ICuentaBancariaRepository CuentaBancariaRepository { get { return _cuentaBancariaRepository ?? (_cuentaBancariaRepository = new CuentaBancariaRepository(_dbContext)); } }
 
         public IDepositoATerminoRepository DepositoATerminoRepository { get { return _depositoATerminoRepository ?? (_depositoATerminoRepository = new DepositoATerminoRepository(_dbContext)); } }

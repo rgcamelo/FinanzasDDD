@@ -5,7 +5,7 @@ using Domain.Base;
 
 namespace Domain.Entities
 {
-    public class CertificadoDeDepositoATermino : Entity<int>
+    public class CertificadoDeDepositoATermino : Entity<int>, IServicioFinanciero
     {
 
         public DateTime FechaDeTermino { get; set; }
@@ -29,7 +29,7 @@ namespace Domain.Entities
         }
 
 
-        public void Consignar(double valor)
+        public void Consignar(double valor,string ciudad)
         {
             if (this.ConsignacionInicial == true)
             {
@@ -74,6 +74,12 @@ namespace Domain.Entities
             double saldoConInteres = Saldo * (1 + TasaInteres * dias); //tasa de interes mensual simple
             Saldo = saldoConInteres;
             return saldoConInteres;
+        }
+
+        public void Trasladar(IServicioFinanciero servicioFinanciero, double valor, string ciudad)
+        {
+            Retirar(valor);
+            servicioFinanciero.Consignar(valor, ciudad);
         }
 
         public void NuevoMovimiento(double valor, string tipoMovimiento)
