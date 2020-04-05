@@ -49,12 +49,6 @@ namespace Domain.Entities
                 }
             }
         }
-        
-        public void Trasladar(IServicioFinanciero servicioFinanciero, double valor, string ciudad)
-        {
-            Retirar(valor);
-            servicioFinanciero.Consignar(valor, ciudad);
-        }
 
 
     }

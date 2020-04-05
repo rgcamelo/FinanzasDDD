@@ -45,6 +45,8 @@ namespace Application
 
         public DateTime FechaDeInicio { get; set; }
         public double TasaInteres { get; set; }
+
+        public string Ciudad { get; set; }
     }
 
     public class CrearDepositoATerminoResponse

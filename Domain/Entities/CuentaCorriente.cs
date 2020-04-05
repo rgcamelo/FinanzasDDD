@@ -6,7 +6,7 @@ namespace Domain.Entities
 {
     public class CuentaCorriente : CuentaBancaria
     {
-        public const double SOBREGIRO = 10000;
+        public double SOBREGIRO = 10000;
         public bool ConsignacionInicial = true;
         private const double MINIMO_CONSIGNACION = 100000;
 

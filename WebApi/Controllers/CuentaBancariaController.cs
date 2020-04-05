@@ -38,7 +38,7 @@ namespace WebApi.Controllers
         public ActionResult<ConsignarResponse> Post(ConsignarRequest request)
         {
             var _service = new ConsignarService(new UnitOfWork(_context));
-            var response = _service.Ejecutar(request);
+            var response = _service.Ejecutar(request,"CuentaBancaria");
             return Ok(response);
         }
     }

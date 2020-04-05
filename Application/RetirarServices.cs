@@ -3,61 +3,64 @@ using Domain.Entities;
 using Domain.Repositories;
 using System;
 
+
 namespace Application
 {
-    public class ConsignarService 
+    public class RetirarServices
     {
         readonly IUnitOfWork _unitOfWork;
-        
-        public ConsignarService(IUnitOfWork unitOfWork)
+
+        public RetirarServices(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
 
 
-        public ConsignarResponse Ejecutar(ConsignarRequest request,string tipo)
+        public RetirarResponse Ejecutar(RetirarRequest request, string tipo)
         {
             switch (tipo)
             {
                 case "CuentaBancaria":
                     var cuenta = _unitOfWork.CuentaBancariaRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
-                    return Consignar(cuenta, request);
-                   
+                    return Retirar(cuenta, request);
+
                 case "CDT":
                     var cdt = _unitOfWork.DepositoATerminoRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
-                    return Consignar(cdt, request);
+                    return Retirar(cdt, request);
 
                 case "TarjetaCredito":
                     var tarjetaCredito = _unitOfWork.TarjetaCreditoRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
-                    return Consignar(tarjetaCredito, request);
+                    return Retirar(tarjetaCredito, request);
                 default:
-                    return new ConsignarResponse() { Mensaje = "Tipo Financiero No Válido." };
+                    return new RetirarResponse() { Mensaje = "Tipo Financiero No Válido." };
             }
-            
-            
+
+
         }
 
-        public ConsignarResponse Consignar(IServicioFinanciero servicioFinanciero, ConsignarRequest request)
+        public RetirarResponse Retirar(IServicioFinanciero servicioFinanciero, RetirarRequest request)
         {
             if (servicioFinanciero != null)
             {
-                servicioFinanciero.Consignar(request.Valor, request.Ciudad);
+                servicioFinanciero.Retirar(request.Valor);
                 _unitOfWork.Commit();
-                return new ConsignarResponse() { Mensaje = $"Su Nuevo saldo es {servicioFinanciero.Saldo}." };
+                return new RetirarResponse() { Mensaje = $"Su Nuevo saldo es {servicioFinanciero.Saldo}." };
             }
             else
             {
-                return new ConsignarResponse() { Mensaje = $"Número de Cuenta No Válido." };
+                return new RetirarResponse() { Mensaje = $"Número de Cuenta No Válido." };
             }
         }
+
+
     }
-    public class ConsignarRequest
+
+    public class RetirarRequest
     {
         public string Numero { get; set; }
         public double Valor { get; set; }
-        public string Ciudad { get; set; }
     }
-    public class ConsignarResponse
+    public class RetirarResponse
     {
         public string Mensaje { get; set; }
     }

@@ -318,7 +318,7 @@ namespace Domain.Test
             cuenta.Nombre = "CDT Ejemplo";
             cuenta.FechaDeInicio = DateTime.Now; 
             cuenta.FechaDeTermino = new DateTime(2020, 3, 4); // A�o Mes Dia
-            cuenta.Consignar(1000000);
+            cuenta.Consignar(1000000,"Valledupar");
             Assert.AreEqual(1000000, cuenta.Saldo);
         }
 
@@ -330,7 +330,7 @@ namespace Domain.Test
             cuenta.Nombre = "CDT Ejemplo";
             cuenta.FechaDeInicio = new DateTime(2020, 1, 3);
             cuenta.FechaDeTermino = new DateTime(2020, 5, 4);
-            cuenta.Consignar(1000000);
+            cuenta.Consignar(1000000,"Valledupar");
             InvalidOperationException ex = Assert.Throws<InvalidOperationException>(() => cuenta.Retirar(10000));
             Assert.AreEqual(ex.Message, "No es posible realizar el Retiro, porque no se ha cumplido la fecha a termino");
             
