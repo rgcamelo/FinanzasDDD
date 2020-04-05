@@ -15,22 +15,23 @@ namespace Application
         }
 
 
-        public void Ejecutar(ConsignarRequest request,string tipo)
+        public ConsignarResponse Ejecutar(ConsignarRequest request,string tipo)
         {
             switch (tipo)
             {
                 case "CuentaBancaria":
-                    var cuenta = _unitOfWork.CuentaBancariaRepository.FindFirstOrDefault(t => t.Numero == request.NumeroCuenta);
-                    Consignar(cuenta, request.Valor);
-                    break;
+                    var cuenta = _unitOfWork.CuentaBancariaRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
+                    return Consignar(cuenta, request.Valor);
+                   
                 case "CDT":
-                    var cdt = _unitOfWork.DepositoATerminoRepository.FindFirstOrDefault(t => t.Numero == request.NumeroCuenta);
-                    Consignar(cdt, request.Valor);
-                    break;
+                    var cdt = _unitOfWork.DepositoATerminoRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
+                    return Consignar(cdt, request.Valor);
+
                 case "TarjetaCredito":
-                    break;
+                    var tarjetaCredito = _unitOfWork.TarjetaCreditoRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
+                    return Consignar(tarjetaCredito, request.Valor);
                 default:
-                    throw new ArgumentOutOfRangeException(message: "Tipo de Servicio Financiero No Valido", innerException: null);
+                    return new ConsignarResponse() { Mensaje = "Tipo Financiero No Válido." };
             }
             
             
@@ -52,7 +53,7 @@ namespace Application
     }
     public class ConsignarRequest
     {
-        public string NumeroCuenta { get; set; }
+        public string Numero { get; set; }
         public double Valor { get; set; }
         public string Ciudad { get; set; }
     }

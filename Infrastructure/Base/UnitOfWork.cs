@@ -16,11 +16,13 @@ namespace Infrastructure.Base
 
         private IDepositoATerminoRepository _depositoATerminoRepository;
 
-       
+        private ITarjetaCreditoRepository _tarjetadeCreditoRepository;
 
         public ICuentaBancariaRepository CuentaBancariaRepository { get { return _cuentaBancariaRepository ?? (_cuentaBancariaRepository = new CuentaBancariaRepository(_dbContext)); } }
 
         public IDepositoATerminoRepository DepositoATerminoRepository { get { return _depositoATerminoRepository ?? (_depositoATerminoRepository = new DepositoATerminoRepository(_dbContext)); } }
+
+        public ITarjetaCreditoRepository TarjetaCreditoRepository { get { return _tarjetadeCreditoRepository ?? (_tarjetadeCreditoRepository = new TarjetadeCreditoRepository(_dbContext)); } }
 
         public UnitOfWork(IDbContext context)
         {

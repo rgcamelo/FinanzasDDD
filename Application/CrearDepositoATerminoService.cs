@@ -32,23 +32,25 @@ namespace Application
             }
         }
 
-        public class CrearDepositoATerminoRequest
-        {
-            public string Nombre { get; set; }
-            public string Numero { get; set; }
-            public DateTime FechaDeTermino { get; set; }
-
-            public DateTime FechaDeInicio { get; set; }
-            public double TasaInteres { get; set; }
-        }
-
-        public class CrearDepositoATerminoResponse
-        {
-            public string Mensaje { get; set; }
-        }
+       
 
 
     }
-   
+
+    public class CrearDepositoATerminoRequest
+    {
+        public string Nombre { get; set; }
+        public string Numero { get; set; }
+        public DateTime FechaDeTermino { get; set; }
+
+        public DateTime FechaDeInicio { get; set; }
+        public double TasaInteres { get; set; }
+    }
+
+    public class CrearDepositoATerminoResponse
+    {
+        public string Mensaje { get; set; }
+    }
+
 }
 

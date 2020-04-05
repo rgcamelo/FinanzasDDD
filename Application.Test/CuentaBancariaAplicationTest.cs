@@ -67,9 +67,9 @@ namespace Application.Test
             var cuenta = new CrearCuentaBancariaRequest { Numero = "1111", Nombre = "aaaaa", TipoCuenta = "Ahorro", Ciudad = "Valledupar" };
             CrearCuentaBancariaService _service = new CrearCuentaBancariaService(new UnitOfWork(_context));
             var response1 = _service.Ejecutar(cuenta);
-            var request = new ConsignarRequest { NumeroCuenta = "1111", Valor = 100000 };
+            var request = new ConsignarRequest { Numero = "1111", Valor = 100000 };
             ConsignarService _service1 = new ConsignarService(new UnitOfWork(_context));
-            var response = _service1.Ejecutar(request);
+            var response = _service1.Ejecutar(request, "CuentaBancaria");
             Assert.AreEqual("Su Nuevo saldo es 100000.", response.Mensaje);
         }
 

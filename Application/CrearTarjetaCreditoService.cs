@@ -7,7 +7,7 @@ using Domain.Entities;
 
 namespace Application
 {
-    class CrearTarjetaCreditoService
+    public class CrearTarjetaCreditoService
     {
         readonly IUnitOfWork _unitOfWork;
 
@@ -15,22 +15,36 @@ namespace Application
         {
             _unitOfWork = unitOfWork;
         }
-        public CrearDepositoATerminoResponse Ejecutar(CrearDepositoATerminoRequest request)
+        public CrearTarjetaCreditoResponse Ejecutar(CrearTarjetaCreditoRequest request)
         {
-            CertificadoDeDepositoATermino cdt = _unitOfWork.DepositoATerminoRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
-            if (cdt == null)
+            Tarjeta_de_Credito tarjetaDeCredito = _unitOfWork.TarjetaCreditoRepository.FindFirstOrDefault(t => t.Numero == request.Numero);
+            if (tarjetaDeCredito == null)
             {
-                CertificadoDeDepositoATermino cdtNuevo = new CertificadoDeDepositoATermino();
-                cdtNuevo.Nombre = request.Nombre;
-                cdtNuevo.Numero = request.Numero;
-                _unitOfWork.DepositoATerminoRepository.Add(cdtNuevo);
+                Tarjeta_de_Credito tarjetaNueva = new Tarjeta_de_Credito();
+                tarjetaNueva.Nombre = request.Nombre;
+                tarjetaNueva.Numero = request.Numero;
+                _unitOfWork.TarjetaCreditoRepository.Add(tarjetaNueva);
                 _unitOfWork.Commit();
-                return new CrearDepositoATerminoResponse() { Mensaje = $"Se creó con exito el deposito {cdtNuevo.Numero}." };
+                return new CrearTarjetaCreditoResponse() { Mensaje = $"Se creó con exito la Tarjeta {tarjetaNueva.Numero}." };
             }
             else
             {
-                return new CrearDepositoATerminoResponse() { Mensaje = $"El número de deposito ya exite" };
+                return new CrearTarjetaCreditoResponse() { Mensaje = $"El número de deposito ya exite" };
             }
         }
+
+        
+    }
+
+    public class CrearTarjetaCreditoRequest
+    {
+        public string Nombre { get; set; }
+        public string Numero { get; set; }
+        public double Cupo { get; set; }
+    }
+
+    public class CrearTarjetaCreditoResponse
+    {
+        public string Mensaje { get; set; }
     }
 }
