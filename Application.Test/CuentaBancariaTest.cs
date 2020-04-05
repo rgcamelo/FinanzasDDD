@@ -22,9 +22,18 @@ namespace Application.Test
         }
 
         [Test]
-        public void CrearCuentaBancariaTest()
+        public void CrearCuentaBancariaAhorroTest()
         {
-            var request = new CrearCuentaBancariaRequest { Numero = "1111", Nombre = "aaaaa", TipoCuenta = "Ahorro" };
+            var request = new CrearCuentaBancariaRequest { Numero = "1111", Nombre = "aaaaa", TipoCuenta = "Ahorro", Ciudad="Valledupar" };
+            CrearCuentaBancariaService _service = new CrearCuentaBancariaService(new UnitOfWork(_context));
+            var response = _service.Ejecutar(request);
+            Assert.AreEqual($"Se creó con exito la cuenta 1111.", response.Mensaje);
+        }
+
+        [Test]
+        public void CrearCuentaBancariaCorrienteTest()
+        {
+            var request = new CrearCuentaBancariaRequest { Numero = "1111", Nombre = "aaaaa", TipoCuenta = "Corriente", Ciudad = "Valledupar" };
             CrearCuentaBancariaService _service = new CrearCuentaBancariaService(new UnitOfWork(_context));
             var response = _service.Ejecutar(request);
             Assert.AreEqual($"Se creó con exito la cuenta 1111.", response.Mensaje);

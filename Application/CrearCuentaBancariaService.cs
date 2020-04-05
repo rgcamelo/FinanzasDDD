@@ -15,7 +15,7 @@ namespace Application
         public CrearCuentaBancariaService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            //_genericFactory = new CuentaBancaria; //No se puede instanciar una clase abstracta
+            _genericFactory = new CuentaBancariaFactory(); 
         }
         public CrearCuentaBancariaResponse Ejecutar(CrearCuentaBancariaRequest request)
         {
@@ -23,7 +23,7 @@ namespace Application
             if (cuenta == null)
             {
 
-                CuentaBancaria cuentaNueva = new CuentaBancariaFactory().CrearCuentaBancaria("Ahorro"); //Debe ir un factory que determine que tipo de cuenta se va a crear
+                CuentaBancaria cuentaNueva = new CuentaBancariaFactory().CreateEntity(request.TipoCuenta);
                 cuentaNueva.Nombre = request.Nombre;
                 cuentaNueva.Numero = request.Numero;
                 cuentaNueva.Ciudad = request.Ciudad;

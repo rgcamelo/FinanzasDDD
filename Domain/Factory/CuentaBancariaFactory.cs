@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using Domain.Contracts;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,22 +7,21 @@ using System.Text;
 
 namespace Domain.Factories
 {
-    public class CuentaBancariaFactory
+    public class CuentaBancariaFactory : IGenericFactory<CuentaBancaria>
     {
-        public CuentaBancaria CrearCuentaBancaria(string tipoCuenta)
+        public CuentaBancaria CreateEntity(string type)
         {
-            CuentaBancaria cuenta;
-            if (tipoCuenta.Equals("corriente"))
+            switch (type)
             {
-                cuenta = new CuentaCorriente();
-                return cuenta;
-
-            }
-            else
-            {
-                cuenta = new CuentaAhorro();
-                return cuenta;
+                case "Ahorro":
+                    return new CuentaAhorro();
+                case "Corriente":
+                    return new CuentaCorriente();
+                default:
+                    throw new ArgumentOutOfRangeException(message: "Tipo de Cuenta No Valido", innerException: null);
             }
         }
     }
+
+
 }
